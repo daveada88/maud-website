@@ -3,10 +3,26 @@
 import { useState } from "react";
 import ThreatAnimation from "./ThreatAnimation";
 
-const Shield = ({ small = false }: { small?: boolean }) => (
-  <span className={small ? "shield shield-small" : "shield"} aria-hidden="true">
-    <span>✓</span>
-  </span>
+// Hand-traced recreation of the new Maud mark (green double-arch "M" + terracotta dot),
+// built from a pasted reference image, not the original vector file — swap the path/circle
+// values here if the exact source .svg becomes available later.
+const Logo = ({ small = false }: { small?: boolean }) => (
+  <svg
+    className={small ? "logo logo-small" : "logo"}
+    viewBox="0 0 520 330"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path
+      d="M70,270 C70,150 100,40 165,40 C220,40 245,110 260,170 C275,110 300,40 355,40 C420,40 450,150 450,270"
+      fill="none"
+      stroke="#5c8467"
+      strokeWidth="85"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <circle cx="260" cy="248" r="38" fill="#c9795c" />
+  </svg>
 );
 
 const Icon = ({ children, tone = "blue" }: { children: React.ReactNode; tone?: string }) => (
@@ -38,7 +54,7 @@ export default function Home() {
       <header className="site-header">
         <div className="shell header-inner">
           <a className="brand" href="#top" aria-label="Maud home" onClick={closeMenu}>
-            <Shield small />
+            <Logo small />
             <span>Maud<small>Home protection</small></span>
           </a>
           <button className="menu-button" type="button" aria-expanded={menuOpen} aria-controls="main-navigation" onClick={() => setMenuOpen(!menuOpen)}>
@@ -72,12 +88,12 @@ export default function Home() {
           <div className="status-card" aria-label="Example Maud protection screen">
             <span className="example-tag">Example screen</span>
             <div className="status-top">
-              <div className="mini-brand"><Shield small /><span>Maud<small>Home protection</small></span></div>
+              <div className="mini-brand"><Logo small /><span>Maud<small>Home protection</small></span></div>
               <span className="protected-pill"><span className="status-dot" /> Protected</span>
             </div>
             <p className="status-preamble">This is what you&rsquo;ll see once Maud is set up in your home:</p>
             <div className="status-main">
-              <div className="large-shield"><Shield /></div>
+              <div className="large-shield"><Logo /></div>
               <h2>Your home is protected</h2>
               <p>Maud works quietly in the background — you won&rsquo;t need to check this screen, but it&rsquo;s here if you ever want to.</p>
             </div>
@@ -189,7 +205,7 @@ export default function Home() {
       <section className="section buy-section" id="buy">
         <div className="shell buy-grid">
           <div className="product-visual" aria-label="Illustration of the Maud Box">
-            <div className="product-box"><Shield /><strong>Maud</strong><span className="product-light" /></div>
+            <div className="product-box"><Logo /><strong>Maud</strong><span className="product-light" /></div>
             <span className="product-cable" aria-hidden="true" />
           </div>
           <div className="product-copy">
@@ -218,7 +234,7 @@ export default function Home() {
       <footer>
         <div className="shell footer-grid">
           <div>
-            <a className="brand footer-brand" href="#top"><Shield small /><span>Maud<small>Home protection</small></span></a>
+            <a className="brand footer-brand" href="#top"><Logo small /><span>Maud<small>Home protection</small></span></a>
             <p>Simple online protection for everyday homes.</p>
             <div className="footer-trust">
               <strong>Who&rsquo;s behind Maud</strong>
@@ -239,7 +255,7 @@ export default function Home() {
         <div className="modal-backdrop" role="presentation" onMouseDown={() => setAccountOpen(false)}>
           <section className="account-modal" role="dialog" aria-modal="true" aria-labelledby="account-title" onMouseDown={(event) => event.stopPropagation()}>
             <button className="modal-close" type="button" aria-label="Close" onClick={() => setAccountOpen(false)}>×</button>
-            <Shield />
+            <Logo />
             <span className="kicker">Trial sign-in</span>
             <h2 id="account-title">Your service, kept simple.</h2>
             <div className="account-tabs" role="tablist" aria-label="Account options">
@@ -262,7 +278,7 @@ export default function Home() {
         <div className="modal-backdrop" role="presentation" onMouseDown={() => setInterestOpen(false)}>
           <section className="account-modal" role="dialog" aria-modal="true" aria-labelledby="interest-title" onMouseDown={(event) => event.stopPropagation()}>
             <button className="modal-close" type="button" aria-label="Close" onClick={() => setInterestOpen(false)}>×</button>
-            <Shield />
+            <Logo />
             <span className="kicker">Join the trial</span>
             <h2 id="interest-title">{interestStep === "complete" ? "Thanks — we'll be in touch" : "Register your interest"}</h2>
             {interestStep === "details" && <>
@@ -294,10 +310,10 @@ export default function Home() {
         <div className="modal-backdrop" role="presentation" onMouseDown={() => setPurchaseOpen(false)}>
           <section className="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" onMouseDown={(event) => event.stopPropagation()}>
             <button className="modal-close" type="button" aria-label="Close checkout" onClick={() => setPurchaseOpen(false)}>×</button>
-            <div className="checkout-header"><Shield small /><div><span className="kicker">Secure order</span><h2 id="checkout-title">{checkoutStep === "complete" ? "Your Maud is reserved" : "Buy your Maud Box"}</h2></div></div>
+            <div className="checkout-header"><Logo small /><div><span className="kicker">Secure order</span><h2 id="checkout-title">{checkoutStep === "complete" ? "Your Maud is reserved" : "Buy your Maud Box"}</h2></div></div>
             {checkoutStep === "details" && <>
               <div className="checkout-progress"><span className="active">1 <small>Your details</small></span><i /><span>2 <small>Payment</small></span></div>
-              <div className="order-line"><div className="order-thumb"><Shield small /></div><div><strong>Maud Box</strong><span>Includes automatic protection updates</span></div><strong>£149</strong></div>
+              <div className="order-line"><div className="order-thumb"><Logo small /></div><div><strong>Maud Box</strong><span>Includes automatic protection updates</span></div><strong>£149</strong></div>
               <form className="checkout-form" onSubmit={(event) => { event.preventDefault(); setCheckoutStep("payment"); }}>
                 <div className="two-fields"><div><label htmlFor="order-first">First name</label><input id="order-first" autoComplete="given-name" required /></div><div><label htmlFor="order-last">Last name</label><input id="order-last" autoComplete="family-name" required /></div></div>
                 <label htmlFor="order-email">Email address</label><input id="order-email" type="email" autoComplete="email" placeholder="you@example.com" required />

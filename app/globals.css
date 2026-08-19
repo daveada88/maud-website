@@ -34,10 +34,8 @@ a { color: inherit; }
 .header-inner { min-height: 74px; display: flex; align-items: center; gap: 36px; }
 .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-size: 1.18rem; font-weight: 750; letter-spacing: -.02em; }
 .brand small, .mini-brand small { display: block; color: var(--muted); font-size: .68rem; line-height: 1.1; font-weight: 500; letter-spacing: 0; }
-.shield { width: 58px; height: 66px; display: inline-grid; place-items: center; color: var(--brand); background: var(--brand-soft); clip-path: polygon(50% 0, 91% 16%, 85% 68%, 50% 100%, 15% 68%, 9% 16%); flex: none; }
-.shield span { font-size: 1.65rem; font-weight: 800; }
-.shield-small { width: 35px; height: 39px; }
-.shield-small span { font-size: 1rem; }
+.logo { width: 82px; height: 52px; display: block; flex: none; }
+.logo-small { width: 50px; height: 32px; }
 .nav { margin-left: auto; display: flex; align-items: center; gap: 28px; }
 .nav a, .nav button { color: #475467; font-weight: 650; font-size: .93rem; text-decoration: none; background: none; border: 0; cursor: pointer; padding: 10px 0; }
 .nav a:hover { color: var(--brand); }
@@ -176,7 +174,7 @@ footer { background: #111820; color: #d0d5dd; padding: 56px 0 24px; }
 
 .modal-backdrop { position: fixed; inset: 0; z-index: 50; background: rgba(16,24,40,.62); display: grid; place-items: center; padding: 20px; }
 .account-modal { position: relative; width: min(500px, 100%); max-height: calc(100vh - 40px); overflow-y: auto; background: white; border-radius: 20px; padding: 34px; box-shadow: 0 24px 70px rgba(0,0,0,.28); }
-.account-modal > .shield { float: left; margin-right: 18px; }
+.account-modal > .logo { float: left; margin-right: 18px; }
 .account-modal h2 { font-size: 2rem; clear: both; padding-top: 24px; }
 .account-modal > p { color: var(--muted); font-size: .92rem; }
 .modal-close { position: absolute; right: 17px; top: 14px; width: 36px; height: 36px; border: 0; background: var(--page); border-radius: 50%; color: var(--muted); font-size: 1.5rem; cursor: pointer; }
@@ -201,7 +199,7 @@ footer { background: #111820; color: #d0d5dd; padding: 56px 0 24px; }
 .checkout-progress .active { color: var(--brand); }
 .checkout-progress .done { color: var(--good); }
 .order-line { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 13px; background: var(--page); border: 1px solid var(--line); border-radius: 13px; padding: 13px; }
-.order-thumb { width: 48px; height: 48px; display: grid; place-items: center; background: white; border-radius: 10px; }
+.order-thumb { width: 58px; height: 48px; display: grid; place-items: center; background: white; border-radius: 10px; }
 .order-line span { display: block; color: var(--muted); font-size: .75rem; }
 .checkout-form { margin-top: 18px; }
 .two-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
