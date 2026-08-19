@@ -12,15 +12,32 @@ const Icon = ({ children, tone = "blue" }: { children: React.ReactNode; tone?: s
   <span className={`icon icon-${tone}`} aria-hidden="true">{children}</span>
 );
 
+// Simple icon-based placeholders standing in for commissioned illustration artwork
+// (flat, friendly, "council leaflet" style per the UX spec — B5). Swap for real
+// illustrations when a budget/illustrator is confirmed; layout does not depend on it.
+const PanelFrame = ({ tone, glyph }: { tone: string; glyph: string }) => (
+  <span className={`panel-frame panel-frame-${tone}`} aria-hidden="true">{glyph}</span>
+);
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState<number | null>(0);
   const [accountOpen, setAccountOpen] = useState(false);
   const [accountMode, setAccountMode] = useState<"signin" | "create">("signin");
+
+  // Register-interest flow (replaces "Buy" as the primary CTA during the trial — see B1).
+  const [interestOpen, setInterestOpen] = useState(false);
+  const [interestStep, setInterestStep] = useState<"details" | "complete">("details");
+
+  // Checkout/payment flow is intentionally kept but disconnected from every CTA during the
+  // trial (Part D: out of scope for functional work, not to be built/fixed — kept only so its
+  // styling, which already shares this file's design tokens, doesn't regress before checkout is
+  // separately commissioned). Nothing sets purchaseOpen true anymore.
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   const [checkoutStep, setCheckoutStep] = useState<"details" | "payment" | "complete">("details");
 
   const closeMenu = () => setMenuOpen(false);
+  const openInterest = () => { setInterestOpen(true); setInterestStep("details"); };
 
   return (
     <main>
@@ -36,9 +53,10 @@ export default function Home() {
           <nav id="main-navigation" className={menuOpen ? "nav nav-open" : "nav"} aria-label="Main navigation">
             <a href="#how" onClick={closeMenu}>How it works</a>
             <a href="#protection" onClick={closeMenu}>What it protects</a>
+            <a href="#trial" onClick={closeMenu}>The trial</a>
             <a href="#help" onClick={closeMenu}>Help</a>
-            <button className="buy-link" type="button" onClick={() => { setPurchaseOpen(true); setCheckoutStep("details"); closeMenu(); }}>Buy Maud</button>
-            <button className="account-link" type="button" onClick={() => { setAccountOpen(true); closeMenu(); }}>My account</button>
+            <button className="register-link" type="button" onClick={() => { openInterest(); closeMenu(); }}>Register your interest</button>
+            <button className="account-link" type="button" onClick={() => { setAccountOpen(true); closeMenu(); }}>Trial sign-in</button>
           </nav>
         </div>
       </header>
@@ -50,27 +68,43 @@ export default function Home() {
             <h1>Safer internet.<br /><span>No technical know-how needed.</span></h1>
             <p className="hero-lead">Maud quietly protects every device in your home from scams, dangerous websites and unwanted tracking. Plug it in once, then get on with your life.</p>
             <div className="hero-actions">
-              <button className="button button-primary" type="button" onClick={() => { setPurchaseOpen(true); setCheckoutStep("details"); }}>Buy a Maud Box</button>
+              <button className="button button-primary" type="button" onClick={openInterest}>Register your interest</button>
               <a className="text-link" href="#protection">Explore protection <span aria-hidden="true">→</span></a>
             </div>
+            <p className="cta-subline">This is an early trial, not a finished product yet. <a href="#trial">See what that means →</a></p>
             <p className="reassurance"><span aria-hidden="true">✓</span> No complicated setup&nbsp;&nbsp; <span aria-hidden="true">✓</span> No ongoing maintenance</p>
           </div>
 
           <div className="status-card" aria-label="Example Maud protection screen">
+            <span className="example-tag">Example screen</span>
             <div className="status-top">
               <div className="mini-brand"><Shield small /><span>Maud<small>Home protection</small></span></div>
               <span className="protected-pill"><span className="status-dot" /> Protected</span>
             </div>
+            <p className="status-preamble">This is what you&rsquo;ll see once Maud is set up in your home:</p>
             <div className="status-main">
               <div className="large-shield"><Shield /></div>
               <h2>Your home is protected</h2>
-              <p>Maud is working quietly in the background.</p>
-            </div>
-            <div className="status-stats">
-              <div><strong>14</strong><span>devices protected</span></div>
-              <div><strong>47</strong><span>threats stopped this week</span></div>
+              <p>Maud works quietly in the background — you won&rsquo;t need to check this screen, but it&rsquo;s here if you ever want to.</p>
             </div>
             <div className="quiet-note"><span aria-hidden="true">●</span> Everything is up to date</div>
+          </div>
+        </div>
+      </section>
+
+      <section className="trial-section" id="trial">
+        <div className="shell trial-card">
+          <Icon tone="blue">i</Icon>
+          <div className="trial-copy">
+            <h2>Before you register: what &ldquo;trial&rdquo; actually means</h2>
+            <p>We&rsquo;re honest people, so here&rsquo;s the honest version.</p>
+            <p>Maud is new. A small number of homes are helping us test it properly before it&rsquo;s ready for everyone — that&rsquo;s what this trial is. Here&rsquo;s exactly what that means for you.</p>
+            <p><strong>It&rsquo;s a paid trial.</strong> You&rsquo;ll pay to take part, because building and posting a real device to your home costs real money. This isn&rsquo;t a free giveaway.</p>
+            <p><strong>It might not work perfectly.</strong> We&rsquo;ve tested Maud carefully, but every home&rsquo;s internet setup is a little different, and there may be things we haven&rsquo;t come across yet. If Maud doesn&rsquo;t get along with your setup, we&rsquo;ll try to fix it remotely first.</p>
+            <p><strong>If we can&rsquo;t fix it, we won&rsquo;t leave you stuck.</strong> Every Maud box comes with a USB drive that puts your box back to a normal, everyday computer — so even in the worst case, you&rsquo;re not left with a useless bit of plastic.</p>
+            <p><strong>You can talk to a real person.</strong> If anything feels wrong, confusing, or broken, call us. A real person will help — see <a href="#help">Help</a> below.</p>
+            <p><strong>This is genuinely a &ldquo;help us build it&rdquo; invitation.</strong> By joining, you&rsquo;re helping shape what Maud becomes for everyone else. Your feedback matters more right now than it will once this is a finished product.</p>
+            <p>If that all sounds fair, we&rsquo;d love to have you. <button type="button" className="text-link inline-cta" onClick={openInterest}>Register your interest →</button></p>
           </div>
         </div>
       </section>
@@ -96,6 +130,41 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section soft-section" id="stops">
+        <div className="shell">
+          <div className="section-heading">
+            <span className="kicker">What it actually stops</span>
+            <h2>Real situations, handled calmly</h2>
+            <p>No jargon — just what happens when something dangerous reaches your home.</p>
+          </div>
+          <div className="panel-sets">
+            <article className="panel-set">
+              <div className="panel-strip">
+                <PanelFrame tone="orange" glyph="✉" />
+                <span className="panel-arrow" aria-hidden="true">→</span>
+                <PanelFrame tone="blue" glyph="✓" />
+                <span className="panel-arrow" aria-hidden="true">→</span>
+                <PanelFrame tone="green" glyph="●" />
+              </div>
+              <p>A scam text says your parcel needs a fee. Maud checks the link — and quietly stops it before it can do anything.</p>
+            </article>
+            <article className="panel-set">
+              <div className="panel-strip">
+                <PanelFrame tone="orange" glyph="⬇" />
+                <span className="panel-arrow" aria-hidden="true">→</span>
+                <PanelFrame tone="blue" glyph="✓" />
+                <span className="panel-arrow" aria-hidden="true">→</span>
+                <PanelFrame tone="green" glyph="●" />
+              </div>
+              <p>A dodgy attachment tries to sneak in. Maud recognises it and blocks it before it reaches any of your devices.</p>
+            </article>
+          </div>
+          {/* Panel sets 3 (device "phoning home") and 4 (ads/tracking) are drafted in the UX
+              spec but deferred here — Part E flags whether to build them now or later as an
+              open question for the business owner, not resolved by this implementation. */}
+        </div>
+      </section>
+
       <section className="section soft-section" id="protection">
         <div className="shell">
           <div className="section-heading left-heading">
@@ -104,12 +173,12 @@ export default function Home() {
             <p>Maud checks internet traffic before it reaches the devices in your home.</p>
           </div>
           <div className="feature-grid">
-            <article><Icon tone="red">×</Icon><div><h3>Stops known online threats</h3><p>Blocks recognised malicious connections and dangerous downloads before they can do harm.</p></div></article>
-            <article><Icon tone="orange">!</Icon><div><h3>Warns you about scam sites</h3><p>Helps prevent visits to known phishing and fraudulent websites designed to steal information.</p></div></article>
-            <article><Icon tone="blue">◎</Icon><div><h3>Blocks unwanted adverts</h3><p>Optional whole-home advert blocking can make web pages cleaner and quicker to load.</p></div></article>
-            <article><Icon tone="purple">◉</Icon><div><h3>Limits hidden tracking</h3><p>Reduces connections that quietly collect information about how your devices are used.</p></div></article>
-            <article><Icon tone="green">✓</Icon><div><h3>Filters content your way</h3><p>Choose simple categories to block across your home, including gambling or adult content.</p></div></article>
-            <article><Icon tone="blue">↻</Icon><div><h3>Stays current automatically</h3><p>Protection updates happen quietly, with no downloads or maintenance jobs for you.</p></div></article>
+            <article><Icon tone="red">×</Icon><div><h3>Stops dangerous traffic before it reaches you</h3><p>Maud recognises known scams, dodgy downloads and hostile connections, and blocks them automatically — including the kind that try to trick even careful people.</p></div></article>
+            <article><Icon tone="orange">!</Icon><div><h3>Spots fake and scam websites</h3><p>If a link leads somewhere designed to steal your details or your money, Maud steps in before the page loads.</p></div></article>
+            <article><Icon tone="blue">◎</Icon><div><h3>Blocks unwanted adverts</h3><span className="optional-tag">Optional</span><p>Turn this on and adverts — including the dangerous kind that try to install something nasty — are filtered out. Pages load cleaner and faster too.</p></div></article>
+            <article><Icon tone="purple">◉</Icon><div><h3>Stops hidden tracking</h3><span className="optional-tag">Optional</span><p>Reduces the quiet background connections that build up a profile of what you and your family do online.</p></div></article>
+            <article><Icon tone="green">✓</Icon><div><h3>Filters what your family can see</h3><span className="optional-tag">Optional</span><p>Switch on simple categories — like gambling or adult content — to keep them off every device in the house, without having to set anything up on each device individually.</p></div></article>
+            <article><Icon tone="blue">↻</Icon><div><h3>Keeps itself up to date, always</h3><p>No downloads, no &ldquo;update available&rdquo; pop-ups, nothing for you to click. Maud keeps its own defences current, quietly, in the background.</p></div></article>
           </div>
           <div className="privacy-note"><Icon tone="green">⌁</Icon><div><strong>Your privacy matters</strong><p>Your threat activity stays on your Maud box. This website only holds the account details needed for your subscription and service history.</p></div></div>
         </div>
@@ -129,6 +198,14 @@ export default function Home() {
               ["Do I need to install anything?", "No. Maud connects beside your router and protects devices across your home without apps or software on each one."],
               ["What happens if Maud needs attention?", "We will send a clear message explaining what has happened and what, if anything, you need to do."],
               ["Can a family member receive alerts?", "Yes. You can nominate someone you trust to receive important service messages with you."],
+              ["What if Maud doesn't work with my internet setup?", "Get in touch and we'll try to sort it remotely first. If we genuinely can't make it work for your home, we'll talk you through your options — including turning the box back into a normal computer using the USB drive we send you."],
+              // Refund wording is deliberately non-committal — B3 flags this as pending
+              // legal/finance sign-off. Do not firm this up without that confirmation.
+              ["Is this a full refund if it doesn't work out?", "We'll always be fair about this — talk to us and we'll sort out what's right for your situation."],
+              ["What happens to my data during the trial?", "Maud checks the type of internet traffic, not what's inside your messages or browsing. The full detail on this lives in our Privacy page — we've written it in plain English too."],
+              // Cancellation mechanism (phone/email/self-serve) is unconfirmed — B3 flags
+              // this too. Deliberately not naming a specific method until confirmed.
+              ["Can I stop being part of the trial at any time?", "Yes — get in touch and we'll take care of it."],
             ].map(([question, answer], index) => (
               <div className={`faq ${faqOpen === index ? "faq-open" : ""}`} key={question}>
                 <button type="button" aria-expanded={faqOpen === index} onClick={() => setFaqOpen(faqOpen === index ? null : index)}><span>{question}</span><span aria-hidden="true">+</span></button>
@@ -146,33 +223,43 @@ export default function Home() {
             <span className="product-cable" aria-hidden="true" />
           </div>
           <div className="product-copy">
-            <span className="kicker">Maud Box</span>
-            <h2>A small box. A big weight off your mind.</h2>
-            <p>Everything you need for simple, whole-home internet protection. Maud arrives ready to connect, with automatic security updates included.</p>
+            <span className="kicker">What it costs to take part</span>
+            <h2><strong>£149</strong> to join the trial, then <strong>£9 a month</strong> while the trial continues.</h2>
+            <p>This covers the Maud box, delivery, and the ongoing protection service while you&rsquo;re helping us test it.</p>
             <ul className="included-list">
-              <li><span>✓</span> Maud protection box and power cable</li>
-              <li><span>✓</span> Simple printed connection guide</li>
-              <li><span>✓</span> Automatic protection updates</li>
-              <li><span>✓</span> Friendly UK-based help</li>
+              <li><span>✓</span> The Maud box, ready to plug in</li>
+              <li><span>✓</span> A simple printed guide</li>
+              <li><span>✓</span> A USB drive to restore your box to a normal computer, just in case</li>
+              <li><span>✓</span> Friendly UK-based help by phone</li>
             </ul>
-            <div className="price-row"><div><strong>£149</strong><span>plus £9 per month</span></div><button className="button button-primary" type="button" onClick={() => { setPurchaseOpen(true); setCheckoutStep("details"); }}>Buy Maud</button></div>
-            <p className="price-note">Trial pricing for this preview. Cancel the monthly service at any time.</p>
+            <div className="price-row"><div><strong>£149</strong><span>then £9 a month</span></div><button className="button button-primary" type="button" onClick={openInterest}>Register your interest</button></div>
+            <p className="price-note">This is trial pricing — it may change once Maud is a finished product. You can stop at any time. <a href="#trial">See what &ldquo;trial&rdquo; means →</a></p>
           </div>
         </div>
       </section>
 
       <section className="closing-section">
         <div className="shell closing-card">
-          <div><span className="kicker">A calmer way to stay safe online</span><h2>Let Maud take care of the technical bits.</h2><p>Simple, automatic protection for your whole home.</p></div>
-          <button className="button button-light" type="button" onClick={() => { setPurchaseOpen(true); setCheckoutStep("details"); }}>Buy a Maud Box</button>
+          <div><span className="kicker">A calmer way to stay safe online</span><h2>Let Maud take care of the technical bits.</h2><p>Simple, automatic protection for your whole home. This is an early trial, not a finished product yet.</p></div>
+          <button className="button button-light" type="button" onClick={openInterest}>Register your interest</button>
         </div>
       </section>
 
       <footer>
         <div className="shell footer-grid">
-          <div><a className="brand footer-brand" href="#top"><Shield small /><span>Maud<small>Home protection</small></span></a><p>Simple online protection for everyday homes.</p></div>
-          <div><strong>Maud</strong><a href="#how">How it works</a><a href="#protection">Protection</a><button type="button" onClick={() => { setPurchaseOpen(true); setCheckoutStep("details"); }}>Buy Maud</button></div>
-          <div><strong>Your service</strong><button type="button" onClick={() => setAccountOpen(true)}>My account</button><a href="#help">Get help</a><a href="#help">Service status</a></div>
+          <div>
+            <a className="brand footer-brand" href="#top"><Shield small /><span>Maud<small>Home protection</small></span></a>
+            <p>Simple online protection for everyday homes.</p>
+            <div className="footer-trust">
+              <strong>Who&rsquo;s behind Maud</strong>
+              <p>Maud is built by a small UK team. We&rsquo;re genuinely reachable — call <a href="tel:08000000000">0800 000 0000</a> and a real person will answer, not a call centre script.</p>
+              {/* Company registration/address: open item per Part E — insert real details
+                  once provided, do not fabricate. */}
+              <p className="footer-note">Company registration/address — to be added</p>
+            </div>
+          </div>
+          <div><strong>Maud</strong><a href="#how">How it works</a><a href="#protection">Protection</a><a href="#trial">The trial</a><button type="button" onClick={openInterest}>Register your interest</button></div>
+          <div><strong>Your service</strong><button type="button" onClick={() => setAccountOpen(true)}>Trial sign-in</button><a href="#help">Get help</a><a href="#help">Service status</a></div>
           <div><strong>Information</strong><a href="#privacy">Privacy</a><a href="#privacy">Terms</a><a href="#privacy">Accessibility</a></div>
         </div>
         <div className="shell footer-bottom"><span>© 2026 Maud. All rights reserved.</span><span>Made to be simple.</span></div>
@@ -183,7 +270,7 @@ export default function Home() {
           <section className="account-modal" role="dialog" aria-modal="true" aria-labelledby="account-title" onMouseDown={(event) => event.stopPropagation()}>
             <button className="modal-close" type="button" aria-label="Close" onClick={() => setAccountOpen(false)}>×</button>
             <Shield />
-            <span className="kicker">My account</span>
+            <span className="kicker">Trial sign-in</span>
             <h2 id="account-title">Your service, kept simple.</h2>
             <div className="account-tabs" role="tablist" aria-label="Account options">
               <button type="button" role="tab" aria-selected={accountMode === "signin"} onClick={() => setAccountMode("signin")}>Sign in</button>
@@ -197,6 +284,38 @@ export default function Home() {
               <button className="button button-primary full-button" type="submit">{accountMode === "signin" ? "Email me a sign-in link" : "Create my account"}</button>
             </form>
             <a className="modal-help" href="#help" onClick={() => setAccountOpen(false)}>Having trouble signing in?</a>
+          </section>
+        </div>
+      )}
+
+      {interestOpen && (
+        <div className="modal-backdrop" role="presentation" onMouseDown={() => setInterestOpen(false)}>
+          <section className="account-modal" role="dialog" aria-modal="true" aria-labelledby="interest-title" onMouseDown={(event) => event.stopPropagation()}>
+            <button className="modal-close" type="button" aria-label="Close" onClick={() => setInterestOpen(false)}>×</button>
+            <Shield />
+            <span className="kicker">Join the trial</span>
+            <h2 id="interest-title">{interestStep === "complete" ? "Thanks — we'll be in touch" : "Register your interest"}</h2>
+            {interestStep === "details" && <>
+              <p>Leave your details and we&rsquo;ll be in touch about joining the trial. This isn&rsquo;t a payment — see <a href="#trial" onClick={() => setInterestOpen(false)}>what the trial involves</a> first if you haven&rsquo;t already.</p>
+              <form className="checkout-form" onSubmit={(event) => { event.preventDefault(); setInterestStep("complete"); }}>
+                <label htmlFor="interest-name">Your name</label>
+                <input id="interest-name" autoComplete="name" placeholder="Your name" required />
+                <label htmlFor="interest-email">Email address</label>
+                <input id="interest-email" type="email" autoComplete="email" placeholder="you@example.com" required />
+                <div className="two-fields">
+                  <div><label htmlFor="interest-postcode">Postcode or area</label><input id="interest-postcode" autoComplete="postal-code" placeholder="For rollout planning" required /></div>
+                  <div><label htmlFor="interest-phone">Phone <span className="optional-label">(optional)</span></label><input id="interest-phone" type="tel" autoComplete="tel" placeholder="Optional" /></div>
+                </div>
+                <button className="button button-primary full-button" type="submit">Register my interest</button>
+              </form>
+            </>}
+            {interestStep === "complete" && (
+              <div className="complete-step">
+                <div className="complete-check">✓</div>
+                <p>Thank you. We&rsquo;ll be in touch by email about joining the trial — there&rsquo;s nothing else for you to do right now.</p>
+                <button className="button button-primary full-button" type="button" onClick={() => setInterestOpen(false)}>Return to Maud</button>
+              </div>
+            )}
           </section>
         </div>
       )}
