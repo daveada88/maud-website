@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ThreatAnimation from "./ThreatAnimation";
 
 const Shield = ({ small = false }: { small?: boolean }) => (
   <span className={small ? "shield shield-small" : "shield"} aria-hidden="true">
@@ -10,13 +11,6 @@ const Shield = ({ small = false }: { small?: boolean }) => (
 
 const Icon = ({ children, tone = "blue" }: { children: React.ReactNode; tone?: string }) => (
   <span className={`icon icon-${tone}`} aria-hidden="true">{children}</span>
-);
-
-// Simple icon-based placeholders standing in for commissioned illustration artwork
-// (flat, friendly, "council leaflet" style per the UX spec — B5). Swap for real
-// illustrations when a budget/illustrator is confirmed; layout does not depend on it.
-const PanelFrame = ({ tone, glyph }: { tone: string; glyph: string }) => (
-  <span className={`panel-frame panel-frame-${tone}`} aria-hidden="true">{glyph}</span>
 );
 
 export default function Home() {
@@ -134,34 +128,10 @@ export default function Home() {
         <div className="shell">
           <div className="section-heading">
             <span className="kicker">What it actually stops</span>
-            <h2>Real situations, handled calmly</h2>
-            <p>No jargon — just what happens when something dangerous reaches your home.</p>
+            <h2>How an unprotected home network is exploited</h2>
+            <p>What can happen when nothing is watching — and where Maud sits in that story.</p>
           </div>
-          <div className="panel-sets">
-            <article className="panel-set">
-              <div className="panel-strip">
-                <PanelFrame tone="orange" glyph="✉" />
-                <span className="panel-arrow" aria-hidden="true">→</span>
-                <PanelFrame tone="blue" glyph="✓" />
-                <span className="panel-arrow" aria-hidden="true">→</span>
-                <PanelFrame tone="green" glyph="●" />
-              </div>
-              <p>A scam text says your parcel needs a fee. Maud checks the link — and quietly stops it before it can do anything.</p>
-            </article>
-            <article className="panel-set">
-              <div className="panel-strip">
-                <PanelFrame tone="orange" glyph="⬇" />
-                <span className="panel-arrow" aria-hidden="true">→</span>
-                <PanelFrame tone="blue" glyph="✓" />
-                <span className="panel-arrow" aria-hidden="true">→</span>
-                <PanelFrame tone="green" glyph="●" />
-              </div>
-              <p>A dodgy attachment tries to sneak in. Maud recognises it and blocks it before it reaches any of your devices.</p>
-            </article>
-          </div>
-          {/* Panel sets 3 (device "phoning home") and 4 (ads/tracking) are drafted in the UX
-              spec but deferred here — Part E flags whether to build them now or later as an
-              open question for the business owner, not resolved by this implementation. */}
+          <ThreatAnimation />
         </div>
       </section>
 
